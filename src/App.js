@@ -1,10 +1,38 @@
+import axios from 'axios';
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hi , I'm a React App</h1>
-    </div>
-  );
+class App extends React.Component {
+  state = { details: [] };
+
+  // Correcting the lifecycle method to camelCase
+  componentDidMount() {
+    let data;
+    axios.get('http://127.0.0.1:8000')
+      .then(response => {
+        data = response.data;
+        this.setState({ details: data });
+      })
+      .catch(error => {
+        console.error("There was an error fetching the data!", error);
+      });
+  }
+
+  render() {
+    return (
+      <div>
+        <header>Data Generated From Django</header>
+        <hr />
+        {this.state.details.map((output, id) => (
+          <div key={id}>
+            <div>
+              <h2>{output.employee}</h2>
+              <h3>{output.department}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 }
 
 export default App;
